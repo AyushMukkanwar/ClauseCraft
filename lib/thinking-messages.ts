@@ -1,0 +1,36 @@
+export const THINKING_MESSAGES = [
+  "Analyzing document structure...",
+  "Extracting metadata from PDFs...",
+  "Validating file formats...",
+  "Preparing contracts for processing...",
+  "Running document analysis...",
+  "Organizing file hierarchy...",
+  "Generating document summaries...",
+  "Processing legal agreements...",
+  "Extracting key terms and conditions...",
+  "Verifying document authenticity...",
+  "Building document index...",
+  "Analyzing document relationships...",
+  "Preparing for secure storage...",
+  "Optimizing file organization...",
+  "Running security checks...",
+  "Cataloging documents...",
+  "Processing document contents...",
+  "Analyzing file structures...",
+  "Preparing AI insights...",
+  "Finalizing document preparation...",
+  "Creating document references...",
+  "Processing smart tags...",
+  "Building document profiles...",
+  "Analyzing patterns in documents...",
+  "Preparing for advanced search...",
+  "Generating document statistics...",
+  "Organizing metadata...",
+  "Creating searchable indexes...",
+  "Running final validation...",
+  "Preparing your files for success...",
+]
+
+export function getRandomThinkingMessage(): string {
+  return THINKING_MESSAGES[Math.floor(Math.random() * THINKING_MESSAGES.length)]
+}
