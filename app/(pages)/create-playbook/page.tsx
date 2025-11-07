@@ -6,10 +6,12 @@ import { ThinkingAnimation } from "@/components/thinking-animation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Zap } from "lucide-react";
+import { extractClausesFromUrl } from "@/lib/api";
+import type { Clause } from "@/lib/api";
 
 export default function CreatePlaybookPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const [clauses, setClauses] = useState<string[]>([]);
+  const [clauses, setClauses] = useState<Clause[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const handleFilesSelected = async (files: File[]) => {
@@ -39,24 +41,15 @@ export default function CreatePlaybookPage() {
 
       const { publicUrls } = await uploadResponse.json();
 
-      // 2. Extract clauses from each PDF concurrently
-      const extractionPromises = publicUrls.map((url: string) =>
-        fetch("/api/extract", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ pdfUrl: url }),
-        }).then((res) => {
-          if (!res.ok) {
-            throw new Error(`Extraction failed for ${url}`);
-          }
-          return res.json();
-        })
+      // 2. Extract clauses from each PDF by calling the FastAPI backend
+      const extractionPromises = publicUrls.map((url: string) => 
+        extractClausesFromUrl(url)
       );
 
       const extractionResults = await Promise.all(extractionPromises);
 
       // 3. Aggregate clauses
-      const allClauses = extractionResults.flatMap((result) => result.clauses);
+      const allClauses = extractionResults.flat();
       setClauses(allClauses);
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred.");
@@ -65,7 +58,7 @@ export default function CreatePlaybookPage() {
     }
   };
 
-  const savePlaybook = async (clauses: string[]) => {
+  const savePlaybook = async (clauses: Clause[]) => {
     // Placeholder function to save clauses
     console.log("Saving playbook with clauses:", clauses);
     try {
@@ -130,8 +123,8 @@ export default function CreatePlaybookPage() {
             <CardContent className="space-y-4">
               {clauses.map((clause, index) => (
                 <div key={index} className="p-4 border rounded-lg bg-background">
-                  <p className="text-sm text-muted-foreground">Clause {index + 1}</p>
-                  <p className="mt-1">{clause}</p>
+                  <p className="text-sm font-bold text-primary">{clause.clause_type}</p>
+                  <p className="mt-1">{clause.clause_text}</p>
                 </div>
               ))}
             </CardContent>

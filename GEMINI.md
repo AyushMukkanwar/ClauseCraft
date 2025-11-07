@@ -14,12 +14,10 @@ It has three main features:
 2. Upload a new contract to **compare it** with the Playbook and get **AI-generated suggestions**.
 3. Ask a **chatbot (RAG)** questions about the firm’s own standards and clauses.
 
-The Next.js app handles:
-- Text extraction from PDF/DOCX files.
-- Heuristic clause parsing and value storage.
-
 The backend (FastAPI + Python) handles:
-- Receiving extracted clauses from the Next.js app.
+
+- Text extraction from PDF/DOCX files.
+- Heuristic clause parsing.
 - LLM-based clause labeling and comparison.
 - Embedding generation and storage in a Vector DB (Pinecone/Weaviate).
 - Persistent DB (Mongo/Postgres) for full clause metadata.
