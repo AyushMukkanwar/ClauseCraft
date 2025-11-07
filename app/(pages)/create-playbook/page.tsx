@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import { UploadZone } from "@/components/upload-zone";
@@ -42,7 +42,7 @@ export default function CreatePlaybookPage() {
       const { publicUrls } = await uploadResponse.json();
 
       // 2. Extract clauses from each PDF by calling the FastAPI backend
-      const extractionPromises = publicUrls.map((url: string) => 
+      const extractionPromises = publicUrls.map((url: string) =>
         extractClausesFromUrl(url)
       );
 
@@ -65,7 +65,7 @@ export default function CreatePlaybookPage() {
       const response = await fetch("/api/playbooks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ clauses }),
+        body: JSON.stringify({ name: "My Playbook", clauses }),
       });
 
       if (!response.ok) {
@@ -87,18 +87,24 @@ export default function CreatePlaybookPage() {
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <Zap className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl md:text-5xl font-bold">
+            <h1 className="text-4xl md:text-5xl font-semi-bold">
               <span className="gradient-gemini-text">Create your playbook</span>
             </h1>
           </div>
           <p className="text-muted-foreground text-lg max-w-2xl">
-            Upload your gold-standard contracts to create a playbook of your preferred clauses.
+            Upload your gold-standard contracts to create a playbook of your
+            preferred clauses.
           </p>
         </div>
 
         <div className="rounded-xl bg-card/50 border border-border p-8">
-          <h2 className="text-xl font-semibold text-foreground mb-6">Upload Documents</h2>
-          <UploadZone onFilesSelected={handleFilesSelected} isLoading={isLoading} />
+          <h2 className="text-xl font-semibold text-foreground mb-6">
+            Upload Documents
+          </h2>
+          <UploadZone
+            onFilesSelected={handleFilesSelected}
+            isLoading={isLoading}
+          />
         </div>
 
         {isLoading && (
@@ -118,12 +124,19 @@ export default function CreatePlaybookPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Extracted Clauses</CardTitle>
-              <Button onClick={() => savePlaybook(clauses)}>Save Playbook</Button>
+              <Button onClick={() => savePlaybook(clauses)}>
+                Save Playbook
+              </Button>
             </CardHeader>
             <CardContent className="space-y-4">
               {clauses.map((clause, index) => (
-                <div key={index} className="p-4 border rounded-lg bg-background">
-                  <p className="text-sm font-bold text-primary">{clause.clause_type}</p>
+                <div
+                  key={index}
+                  className="p-4 border rounded-lg bg-background"
+                >
+                  <p className="text-sm font-bold text-primary">
+                    {clause.clause_type}
+                  </p>
                   <p className="mt-1">{clause.clause_text}</p>
                 </div>
               ))}

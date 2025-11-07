@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Playbook {
+  id        Int      @id @default(autoincrement())
+  name      String
+  clauses   Clause[]
+  createdAt DateTime @default(now())
+}
+
+model Clause {
+  id          Int      @id @default(autoincrement())
+  playbook    Playbook @relation(fields: [playbookId], references: [id])
+  playbookId  Int
+  clause_type String
+  clause_text String
+  createdAt   DateTime @default(now())
+}
